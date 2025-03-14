@@ -1,11 +1,13 @@
 <?php
-require '../../includes/functions.php';
+require '../includes/functions.php'; // Sửa từ '../../includes/functions.php'
 checkRole('admin');
+$id = (int)$_GET['id'];
+$user = $conn->query("SELECT * FROM users WHERE id = $id")->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $conn->real_escape_string($_POST['username']);
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
     $role = $_POST['role'];
-    $conn->query("INSERT INTO users (username, password, role) VALUES ('$username', '$password', '$role')");
+    $password = !empty($_POST['password']) ? password_hash($_POST['password'], PASSWORD_DEFAULT) : $user['password'];
+    $conn->query("UPDATE users SET username='$username', password='$password', role='$role' WHERE id=$id");
     header('Location: ../../public/manage.php');
     exit;
 }
@@ -13,20 +15,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Thêm User</title>
+    <title>Sửa User</title>
     <link rel="stylesheet" href="../../public/style.css">
 </head>
 <body>
     <div class="container">
-        <h2>Thêm User</h2>
+        <h2>Sửa User</h2>
         <form method="POST">
-            <input type="text" name="username" placeholder="Username" required>
-            <input type="password" name="password" placeholder="Password" required>
+            <input type="text" name="username" value="<?php echo $user['username']; ?>" required>
+            <input type="password" name="password" placeholder="Mật khẩu mới (để trống nếu không đổi)">
             <select name="role" required>
-                <option value="admin">Admin</option>
-                <option value="editor">Editor</option>
+                <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
+                <option value="editor" <?php if ($user['role'] == 'editor') echo 'selected'; ?>>Editor</option>
             </select>
-            <button type="submit" class="btn btn-success">Thêm</button>
+            <button type="submit" class="btn btn-success">Cập nhật</button>
             <a href="../../public/manage.php" class="btn btn-warning">Quay lại</a>
         </form>
     </div>

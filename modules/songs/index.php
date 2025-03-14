@@ -1,5 +1,5 @@
 <?php
-require '../../includes/functions.php';
+require '../includes/functions.php'; // Sửa từ '../../includes/functions.php'
 $songs = $conn->query("SELECT s.*, p.name AS playlist_name FROM songs s JOIN playlists p ON s.playlist_id = p.id WHERE p.user_id = {$_SESSION['user_id']}");
 ?>
 <h2>Quản lý Songs</h2>

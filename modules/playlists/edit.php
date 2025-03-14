@@ -1,5 +1,5 @@
 <?php
-require '../../includes/functions.php';
+require '../includes/functions.php'; // Sửa từ '../../includes/functions.php'
 $id = (int)$_GET['id'];
 $playlist = $conn->query("SELECT * FROM playlists WHERE id = $id AND user_id = {$_SESSION['user_id']}")->fetch_assoc();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

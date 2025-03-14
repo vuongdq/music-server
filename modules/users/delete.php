@@ -1,5 +1,5 @@
 <?php
-require '../../includes/functions.php';
+require '../includes/functions.php'; // Sửa từ '../../includes/functions.php'
 checkRole('admin');
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = (int)$_POST['id'];
